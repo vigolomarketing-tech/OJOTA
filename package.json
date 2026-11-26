@@ -1,0 +1,20 @@
+{
+  "name": "ojota",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "esbuild src/ojota3d.src.js --bundle --minify --format=iife --global-name=Ojota3D --outfile=js/ojota3d.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vigolomarketing-tech/ojota.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vigolomarketing-tech/ojota/issues"
+  },
+  "homepage": "https://github.com/vigolomarketing-tech/ojota#readme",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.187.0"
+  },
+  "private": true
+}
