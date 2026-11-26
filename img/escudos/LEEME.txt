@@ -1,3 +1,3 @@
-Soltá acá los escudos en PNG con fondo transparente (escudo-2.png, escudo-3.png) y quedan listos en la ojota 3D.
-Proporción ideal: 6:7 (ancho:alto), mínimo 512 px de ancho.
+Escudos en PNG con fondo transparente (boca.png, river.png). Para sumar otro: soltalo acá y agregalo en js/data.js (escudos).
+Proporción ideal 6:7 (ancho:alto).
 Al abrir el sitio con doble clic (file://) el navegador bloquea estas imágenes en WebGL; publicado o con un servidor local funciona.

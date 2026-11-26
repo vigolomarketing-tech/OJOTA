@@ -66,7 +66,7 @@
   $('#carousel').innerHTML = C.productos.map((p) => `
     <article class="card" data-id="${p.id}">
       <div class="card-media">
-        <img src="${p.foto}" alt="${p.nombre}" loading="lazy" width="600" height="600">
+        <img src="${p.foto}" alt="${p.nombre}" loading="lazy" width="900" height="720">
         ${p.etiqueta ? `<span class="tag">${p.etiqueta}</span>` : ''}
       </div>
       <h3>${p.nombre}</h3>

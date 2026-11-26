@@ -22,8 +22,8 @@ const CONFIG = {
   // Para sumar un escudo: PNG con fondo transparente en img/escudos/ y completar "img".
   escudos: [
     { id: "cadg", nombre: "Defensores de Glew", color: "#f2b01e", dibujo: "cadg" },
-    { id: "escudo-2", nombre: "Escudo 2", color: "#2f6df6", img: "img/escudos/escudo-2.png" }, // PENDIENTE CLIENTE
-    { id: "escudo-3", nombre: "Escudo 3", color: "#e5252a", img: "img/escudos/escudo-3.png" }, // PENDIENTE CLIENTE
+    { id: "boca", nombre: "Boca Juniors", color: "#2f6df6", img: "img/escudos/boca.png" },
+    { id: "river", nombre: "River Plate", color: "#e5252a", img: "img/escudos/river.png" },
   ],
 
   talles: ["38", "39", "40", "41", "42", "43", "44", "45"],
@@ -33,6 +33,7 @@ const CONFIG = {
     { id: "faraon-verde", nombre: "Faraon Pro Verde", descripcion: "Plantilla texturada que masajea y banda ancha ajustable. Para todos los días.", precio: 22900, foto: "img/faraon-verde.webp", etiqueta: "Más pedida" },
     { id: "faraon-azul", nombre: "Faraon Pro Azul", descripcion: "Suela gruesa que amortigua y detalle azul eléctrico en la banda.", precio: 22900, foto: "img/faraon-azul.webp", etiqueta: "" },
     { id: "airness-marino", nombre: "Airness Marino", descripcion: "Banda con abrojo que se ajusta al pie. Liviana y cómoda para el verano.", precio: 19900, foto: "img/airness-azul.webp", etiqueta: "" },
+    { id: "adidas-negra", nombre: "Adidas Slide Negra", descripcion: "Plantilla con relieve marcado y banda ancha texturada. Negra, va con todo.", precio: 32900, foto: "img/adidas-negra.webp", etiqueta: "" },
     { id: "personalizada", nombre: "Ojota con tu escudo", descripcion: "Negra lisa con el escudo del club que elijas en relieve sobre la banda.", precio: 27900, foto: "img/ojota-escudo.webp", etiqueta: "A tu medida" },
   ],
 

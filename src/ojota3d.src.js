@@ -166,13 +166,14 @@ export function init(container, opts) {
   const rim = new DirectionalLight(accent, 3.2); rim.position.set(-6, 3, -5); scene.add(rim);
 
   // Escenario: brillo, sombra y anillos
+  const stage = new Group(); scene.add(stage);
   const glowMat = new MeshBasicMaterial({ map: radialTex([[0, 'rgba(255,255,255,.95)'], [.5, 'rgba(255,255,255,.28)'], [1, 'rgba(255,255,255,0)']]), color: accent, transparent: true, opacity: .7, blending: AdditiveBlending, depthWrite: false });
-  const glow = new Mesh(new CircleGeometry(7, 64), glowMat); glow.rotation.x = -Math.PI / 2; glow.position.y = -0.3; scene.add(glow);
+  const glow = new Mesh(new CircleGeometry(7, 64), glowMat); glow.rotation.x = -Math.PI / 2; glow.position.y = -0.3; stage.add(glow);
   const shadow = new Mesh(new CircleGeometry(5.2, 48), new MeshBasicMaterial({ map: radialTex([[0, 'rgba(0,0,0,.65)'], [.6, 'rgba(0,0,0,.25)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false }));
-  shadow.rotation.x = -Math.PI / 2; shadow.position.y = -0.2; scene.add(shadow);
+  shadow.rotation.x = -Math.PI / 2; shadow.position.y = -0.2; stage.add(shadow);
   const ringMat = (o) => new MeshBasicMaterial({ color: accent, transparent: true, opacity: o, depthWrite: false });
   const ring1 = new Mesh(new RingGeometry(5.0, 5.05, 128), ringMat(.7)), ring2 = new Mesh(new RingGeometry(6.1, 6.14, 128), ringMat(.3)), pulse = new Mesh(new RingGeometry(4.9, 5.0, 128), ringMat(0));
-  [ring1, ring2, pulse].forEach((r) => { r.rotation.x = -Math.PI / 2; r.position.y = -0.25; scene.add(r); });
+  [ring1, ring2, pulse].forEach((r) => { r.rotation.x = -Math.PI / 2; r.position.y = -0.25; stage.add(r); });
 
   // Ojota
   const rubber = new MeshPhysicalMaterial({ color: 0x0f1012, roughness: .5, clearcoat: .3, clearcoatRoughness: .45 });
@@ -186,15 +187,15 @@ export function init(container, opts) {
   const thread = new MeshStandardMaterial({ color: 0x2c2e33, roughness: .8 });
   [-1, 1].forEach((s) => { const m = new Mesh(stitch(s * (STRAP_D / 2 - .06)), thread); m.position.set(0, STRAP_Y, STRAP_Z); ojota.add(m); });
   const label = new Mesh(new PlaneGeometry(2, .62), new MeshStandardMaterial({ map: labelTex(nombre), transparent: true, roughness: .8, opacity: .8 }));
-  label.rotation.x = -Math.PI / 2; label.position.set(0, .755, -2.3); ojota.add(label);
+  label.rotation.x = -Math.PI / 2; const labelG = new Group(); labelG.position.set(0, .755, -2.3); labelG.add(label); ojota.add(labelG);
 
   // Escudo (parche curvo sobre la tira)
   const textures = crests(escudos).map((c) => { const t = new CanvasTexture(c); t.colorSpace = SRGBColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); return t; });
   const decalMat = new MeshPhysicalMaterial({ map: textures[0], transparent: true, alphaTest: .02, roughness: .4, clearcoat: .6, polygonOffset: true, polygonOffsetFactor: -2, depthWrite: false });
   const decal = new Mesh(decalGeo(), decalMat); decal.position.set(0, STRAP_Y + B + BEV + 0.014, STRAP_Z); ojota.add(decal);
 
-  const spinG = new Group(); spinG.add(ojota);
-  const tilt = new Group(); tilt.rotation.x = -0.1; tilt.add(spinG); scene.add(tilt);
+  const tiltG = new Group(); tiltG.add(ojota);
+  const spinG = new Group(); spinG.add(tiltG); scene.add(spinG);
 
   // Flotantes
   const floaters = new Group(); scene.add(floaters);
@@ -226,10 +227,15 @@ export function init(container, opts) {
     const w = container.clientWidth || 1, h = container.clientHeight || 1;
     renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
     const vt = Math.tan(MathUtils.degToRad(camera.fov / 2)), ht = vt * camera.aspect;
-    const d = Math.max(4.5 / ht, 3.6 / vt);
-    const sx = camera.aspect > 1.2 ? w * 0.14 : 0, sy = camera.aspect <= 1.2 ? h * 0.07 : 0;
-    camera.setViewOffset(w, h, -sx, -sy, w, h);
-    camera.position.set(0, d * Math.sin(EL), d * Math.cos(EL)); camera.lookAt(0, .45, 0);
+    // Vertical (celular): la ojota "parada" apoyada en el talón, mirando la plantilla. Horizontal: acostada.
+    const up = camera.aspect < 1.1, flip = up ? Math.PI : 0;
+    tiltG.rotation.x = up ? 1.05 : -0.1; ojota.rotation.y = flip; decal.rotation.y = flip; labelG.rotation.y = flip;
+    stage.position.y = up ? -3.2 : 0; stage.scale.setScalar(up ? .62 : 1);
+    floaters.position.set(up ? 0 : 2.2, up ? -2.4 : 0, 0);
+    const d = up ? Math.max(3.4 / ht, 7.6 / vt) : Math.max(4.5 / ht, 3.6 / vt);
+    const sx = !up && camera.aspect > 1.2 ? w * 0.14 : 0, sy = up ? h * 0.045 : 0;
+    camera.setViewOffset(w, h, -sx, sy, w, h);
+    camera.position.set(0, d * Math.sin(EL), d * Math.cos(EL)); camera.lookAt(0, up ? .2 : .45, 0);
   }
   new ResizeObserver(fit).observe(container); fit();
 
